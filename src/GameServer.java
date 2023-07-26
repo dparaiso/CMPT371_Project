@@ -22,11 +22,14 @@ class GameServer {
             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
             clientWriters.add(out);
             new Thread(new ClientHandler(clientSocket, this)).start();
+
+            String welcomeMessage = PlayerHandler.newPlayer(); // Give each client their own color
+            out.println(welcomeMessage);
         }
     }
 
     // Method to broadcast a message to all clients
-    public void broadcast(String message) {
+    public static void broadcast(String message) {
         for (PrintWriter writer : clientWriters) {
             writer.println(message);
         }

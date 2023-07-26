@@ -20,14 +20,13 @@ class ClientHandler implements Runnable {
         while (true) {
             try {
                 if (!((receivedMessage = in.readLine()) != null))
-                    // This is where the board takes a message and starts writing it in the board.
-                    // Mutex lock function called here
-                    // Board also gives conformation if the block is currently busy or not.
                     break;
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            // Broadcast received message to all clients
+            // This is where the board takes a message and starts writing it in the board.
+            // Mutex lock function called here
+            // Board also gives conformation if the block is currently busy or not.
             server.broadcast(receivedMessage);
         }
     }
