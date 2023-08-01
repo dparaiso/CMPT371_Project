@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 class GameServer {
-    private ServerSocket serverSocket;
-    private List<PrintWriter> clientWriters;
+    private final ServerSocket serverSocket;
+    private static List<PrintWriter> clientWriters;
+
+    public static Board gameBoard;
 
 
     public GameServer(int port) throws IOException {
@@ -17,6 +19,7 @@ class GameServer {
     }
 
     public void start() throws IOException {
+        gameBoard = new Board(8);
         while (clientWriters.size() < 4) { // Accept up to 4 clients
             Socket clientSocket = serverSocket.accept();
             PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);

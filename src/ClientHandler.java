@@ -24,10 +24,27 @@ class ClientHandler implements Runnable {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            // This is where the board takes a message and starts writing it in the board.
-            // Mutex lock function called here
-            // Board also gives conformation if the block is currently busy or not.
-            server.broadcast(receivedMessage);
+            receivedMessage = receivedMessage.replaceAll("\\s", "");
+            String[] clientcommand = receivedMessage.split("\\,");
+//            }
+            if(clientcommand[0].equals("server")){
+                if (clientcommand[1].equals("fill")){
+                    if (!GameServer.gameBoard.startFillingBox(Integer.parseInt(clientcommand[3]), Integer.parseInt(clientcommand[4]), clientcommand[2])){
+                        GameServer.gameBoard.failedFillingBox(Integer.parseInt(clientcommand[3]), Integer.parseInt(clientcommand[4]), clientcommand[2]);
+                    }
+                }
+                if(clientcommand[1].equals("success")){
+                    GameServer.gameBoard.successfulFillingBox(Integer.parseInt(clientcommand[3]), Integer.parseInt(clientcommand[4]), clientcommand[2]);
+                }
+                if(clientcommand[1].equals("failed")){
+                    GameServer.gameBoard.failedFillingBox(Integer.parseInt(clientcommand[3]), Integer.parseInt(clientcommand[4]), clientcommand[2]);
+                }
+            }
+            System.out.println(receivedMessage);
+
+            //Received: server, fill, blue, 1, 3
+            //The line below maybe redundat
+            //server.broadcast(receivedMessage);
         }
     }
 }

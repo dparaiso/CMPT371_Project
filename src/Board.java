@@ -1,7 +1,7 @@
 import java.util.*;
 
 public class Board {
-    private final Box[][] boxes;
+    private static Box[][] boxes;
 
     public static class PlayerScore {
         public String color;
@@ -33,7 +33,7 @@ public class Board {
         return boxes[x][y];
     }
 
-    public boolean startFillingBox(int x, int y, String color){
+    public static boolean startFillingBox(int x, int y, String color){
 
         if( boxes[x][y].startFill(color)){
             String fillMessage = "[fill, "+color+ ", "+ Integer.toString(x)+ ", " + Integer.toString(y) + "]";
@@ -44,24 +44,17 @@ public class Board {
         }
     }
 
-    public boolean failedFillingBox(int x, int y, String color){
+    public static void failedFillingBox(int x, int y, String color){
         if (boxes[x][y].failedFill(color)) {
             String failMessage = "[fail, " + color + ", " + Integer.toString(x) + ", " + Integer.toString(y) + "]";
             GameServer.broadcast(failMessage);
-            return true;
-        } else {
-            return false;
         }
     }
 
-    public boolean successfulFillingBox(int x, int y, String color){
-        if (boxes[x][y].successfulFill(color)) {
-            String successMessage = "[success, " + color + ", " + Integer.toString(x) + ", " + Integer.toString(y) + "]";
-            GameServer.broadcast(successMessage);
-            return true;
-        } else {
-            return false;
-        }
+    public static void successfulFillingBox(int x, int y, String color){
+        boxes[x][y].successfulFill(color);
+        String successMessage = "[success, " + color + ", " + Integer.toString(x) + ", " + Integer.toString(y) + "]";
+        GameServer.broadcast(successMessage);
     }
 
     public ArrayList<String> findWinner(){

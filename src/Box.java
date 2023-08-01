@@ -12,7 +12,7 @@ class Box {
         return isLocked;
     }
     public synchronized boolean startFill(String color){
-        if(isLocked || !Objects.equals(color, "white")){
+        if(isLocked || !Objects.equals(this.color, "white")){
             return false;
         }
         else{
@@ -22,9 +22,8 @@ class Box {
         }
     }
 
-    public synchronized boolean successfulFill(String color){
+    public synchronized void successfulFill(String color){
         this.color = color;
-        return true;
     }
 
     public synchronized boolean failedFill (String color){
