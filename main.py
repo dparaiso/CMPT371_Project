@@ -1,8 +1,9 @@
 from utils import *
-from Player import player
+from Player import *
 from client import Network
 import sys
 import time
+import pygame
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))                          
 pygame.display.set_caption("Game Name")
