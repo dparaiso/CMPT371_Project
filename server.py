@@ -9,8 +9,8 @@ from Player import player
 
                                                                         #setting server with local IP
 
-
-server = "10.0.0.153"  # local IP address
+ 
+server = "10.0.0.218"  # local IP address
 port  = 5555
 print (socket.gethostname())  #LAPTOP-GOULBU1Q
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

@@ -1,12 +1,11 @@
 from utils import *
-from Player import *
+from Player import player
 from client import Network
 import sys
 import time
-import pygame
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))                          
-pygame.display.set_caption("Game Name")
+pygame.display.set_caption("Deny and Conquer")
 
 
 def init_grid(rows, cols, color):                               #setting grid
@@ -19,7 +18,8 @@ def init_grid(rows, cols, color):                               #setting grid
     
     return grid
 
-
+import ctypes
+ctypes.windll.user32.SetProcessDPIAware()
 
 def draw_grid(win, grid):                                       # drawing grid
     for i, row in enumerate(grid):
@@ -136,24 +136,32 @@ def col_grid(win,grid, Player1, Player2):                       #updating all di
          Player1.set_status(0)
          Player2.set_status(1)
 
-    if Player1.get_status() == 1:     
-        message_to_screen("You Won", p.color)
-        print ("you won")
-        # raise IndexError
-    if Player1.get_status() == 0:     
-        message_to_screen("You Lose", p.color) 
-        print ("you lose")
+    # if Player1.get_status() == 1:     
+    #     message_to_screen("You Won with score  ", p.occupied_Count, p.color)
+    #     # print ("you won")
+    # #     # raise IndexError
+    # if Player1.get_status() == 0:     
+    #     message_to_screen("You Lose with score  ",p.occupied_Count, p.color) 
+        # print ("you lose")
         # raise IndexError              
     
     
-def message_to_screen (msg, color):
+def message_to_screen (msg,num, color):
     WIN.fill(color)
     font = get_font(30)
+    msg = msg + str(num)
     screen_text = font.render(msg, True, BG_COLOR)    
-    WIN.blit(screen_text, [304,304]) 
+    WIN.blit(screen_text, [170,250]) 
     pygame.display.update()
-    time.sleep(20)    
-   
+    # time.sleep(20)    
+
+def Score_to_screen (msg, color):
+    WIN.fill(color)
+    font = get_font(30)
+    m = str(msg)
+    screen_text= font.render(m, True, BG_COLOR)    
+    WIN.blit(screen_text, [280,290]) 
+    pygame.display.update()   
    
     
 
@@ -171,6 +179,8 @@ def get_row_col_from_pos(pos):                           # returning row,col pos
 def get_grid_box_number(pos):                           # returning box position from the grid.
     row, col = pos
     
+    if row // PIXEL_SIZE >= ROWS:
+        raise IndexError
     
     if (row >= 0 and row <=76):
         y=1
@@ -236,29 +246,33 @@ while run:
         if event.type == pygame.QUIT:
             run = False
         
-        # try:
-        p.set_pos(pygame.mouse.get_pos())               #getting/setting cursor position of current player
-        if pygame.mouse.get_pressed()[0]:
-        # p.pos = pygame.mouse.get_pos() 
-        
-            p.Play()                                    #calling Play() if mouse is pressed 
-        else:    
-            p.Reset() 
+        try:
+            p.set_pos(pygame.mouse.get_pos())               #getting/setting cursor position of current player
+            if pygame.mouse.get_pressed()[0]:
+            # p.pos = pygame.mouse.get_pos() 
             
-                    
-    
-                #     # p.pos = pos
-                #     # p.Play()
-                    
-        # except IndexError:
+                p.Play()                                    #calling Play() if mouse is pressed 
+            else:    
+                p.Reset() 
+                
+                        
+        
+                    #     # p.pos = pos
+                    #     # p.Play()
+                        
+            # except IndexError:
             while p.get_status() == 1:
-                message_to_screen("You Won", p.color)
+                message_to_screen("You Won with score  ",p.occupied_Count, p.color)
+                # Score_to_screen(p.occupied_Count, p.color)
                 
             while p.get_status() == 0:
-                message_to_screen("You Lose", p.color)
+                message_to_screen("You Lose with score  ", p.occupied_Count, p.color)
+                # Score_to_screen(p.occupied_Count, p.color)  
                 
-            #run = False
-            #     continue
+                #run = False
+                #     continue
+        except IndexError:
+            continue    
               
     draw(WIN, grid)
     col_grid(WIN, grid, p,p2)                            # Updating screen as per activity

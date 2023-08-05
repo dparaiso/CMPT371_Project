@@ -112,7 +112,10 @@ def get_row_col_from_pos(pos):                           # returning row,col pos
 
 def get_grid_box_number(pos):                           # returning box position from the grid.
     row, col = pos
-    
+    x = y = -1
+    if row // PIXEL_SIZE >= ROWS:
+        # raise IndexError
+        return
     
     if (row >= 0 and row <=76):
         y=1
